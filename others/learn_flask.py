@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 #* 创建web应用程序
 app = Flask(__name__)
@@ -24,6 +24,21 @@ def pass_list():
     s = 'Passing a list'
     l = ['String', 1, 1.0]
     return render_template('list.html', s=s, l=l)
+
+#* 从页面接收变量
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/check', methods=['POST'])  # 对应 login.html 中的 <form action='/check' method='POST'> 
+def check():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    if username == password:
+        return 'Log in succeed'
+    else:
+        return render_template('login.html', message='Failed')
 
 
 if __name__ == '__main__':
